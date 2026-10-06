@@ -1,6 +1,6 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import { motion, useInView, useReducedMotion } from 'motion/react'
-import { BriefcaseBusiness, Code, Globe, GraduationCap, Network, Wrench, type LucideIcon } from 'lucide-react'
+import { BriefcaseBusiness, Code, Globe, GraduationCap, Map as MapIcon, Network, Wrench, type LucideIcon } from 'lucide-react'
 import type { JourneyIcon, JourneyStep } from '../../data/profile'
 import { ease } from '../../lib/motion'
 
@@ -29,6 +29,7 @@ const ICONS: Record<JourneyIcon, LucideIcon> = {
   network: Network,
   globe: Globe,
   code: Code,
+  map: MapIcon,
 }
 
 interface Point {
@@ -41,11 +42,10 @@ interface Geometry {
   start: Point
   end: Point
   main: string
-  branch: string | null
-  /** Momento (0 a 1 do desenho) em que cada etapa é alcançada. */
+  /** Uma ramificação por etapa paralela; from/to em frações do tempo da linha principal. */
+  branches: { d: string; from: number; to: number }[]
+  /** Momento (0 a 1 do desenho, ou pouco além no fim) em que cada etapa é alcançada. */
   at: number[]
-  branchFrom: number
-  branchTo: number
 }
 
 const distance = (a: Point, b: Point) => Math.hypot(b.x - a.x, b.y - a.y)
@@ -89,42 +89,58 @@ function measure(container: HTMLElement, steps: JourneyStep[]): Geometry | null 
   mainIndexes.forEach((stepIndex, i) => (at[stepIndex] = cumulative[i] / total))
   const main = points.map((p, i) => `${i ? 'L' : 'M'}${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' ')
 
-  // Ramificação: a etapa paralela acontece junto com a etapa principal anterior a ela.
-  const parallelIndex = steps.findIndex((step) => step.parallel)
-  // Posição, na linha principal, da etapa "irmã" (a última antes da paralela).
-  let a = -1
-  mainIndexes.forEach((stepIndex, i) => {
-    if (stepIndex < parallelIndex) a = i
-  })
-  if (parallelIndex < 0 || a < 0 || a >= points.length - 1) return { start: points[0], end: points[points.length - 1], main, branch: null, at, branchFrom: 0, branchTo: 0 }
-
-  const b = a + 1
-  const horizontal = Math.abs(points[a].y - points[b].y) < 1
-  let from: number
-  let to: number
-  if (horizontal) {
-    // Lado a lado: sai no meio do trecho anterior e volta no meio do seguinte.
-    from = a > 0 ? (cumulative[a - 1] + cumulative[a]) / 2 : cumulative[a]
-    to = (cumulative[a] + cumulative[b]) / 2
-  } else {
-    // Em coluna: sai logo abaixo da etapa irmã e volta logo acima da seguinte.
-    const gap = Math.min(24, (cumulative[b] - cumulative[a]) / 4)
-    from = cumulative[a] + gap
-    to = cumulative[b] - gap
-  }
-  const start = pointAt(points, cumulative, from)
-  const end = pointAt(points, cumulative, to)
-  const mid = centers[parallelIndex]
+  // Ramificações: cada etapa paralela acontece junto com a etapa principal anterior a ela
+  // (a "irmã"). No meio do caminho, a ramificação sai e volta para a linha; no fim, as duas
+  // etapas continuam em andamento, então ela termina no ponto da etapa paralela.
+  const horizontal = points.length > 1 && Math.abs(points[0].y - points[1].y) < 1
+  const fix = (p: Point) => `${p.x.toFixed(1)} ${p.y.toFixed(1)}`
   const curve = (p: Point, q: Point) =>
     horizontal
-      ? `C${((p.x + q.x) / 2).toFixed(1)} ${p.y.toFixed(1)} ${((p.x + q.x) / 2).toFixed(1)} ${q.y.toFixed(1)} ${q.x.toFixed(1)} ${q.y.toFixed(1)}`
-      : `C${p.x.toFixed(1)} ${((p.y + q.y) / 2).toFixed(1)} ${q.x.toFixed(1)} ${((p.y + q.y) / 2).toFixed(1)} ${q.x.toFixed(1)} ${q.y.toFixed(1)}`
-  const branch = `M${start.x.toFixed(1)} ${start.y.toFixed(1)} ${curve(start, mid)} ${curve(mid, end)}`
+      ? `C${fix({ x: (p.x + q.x) / 2, y: p.y })} ${fix({ x: (p.x + q.x) / 2, y: q.y })} ${fix(q)}`
+      : `C${fix({ x: p.x, y: (p.y + q.y) / 2 })} ${fix({ x: q.x, y: (p.y + q.y) / 2 })} ${fix(q)}`
+  const branches: Geometry['branches'] = []
 
-  const branchFrom = from / total
-  const branchTo = to / total
-  at[parallelIndex] = (branchFrom + branchTo) / 2
-  return { start: points[0], end: points[points.length - 1], main, branch, at, branchFrom, branchTo }
+  steps.forEach((step, parallelIndex) => {
+    if (!step.parallel) return
+    let a = -1
+    mainIndexes.forEach((stepIndex, i) => {
+      if (stepIndex < parallelIndex) a = i
+    })
+    if (a < 0) return
+    const node = centers[parallelIndex]
+    const last = a === points.length - 1
+
+    if (!last) {
+      const b = a + 1
+      let from: number
+      let to: number
+      if (horizontal) {
+        // Lado a lado: sai no meio do trecho anterior e volta no meio do seguinte.
+        from = a > 0 ? (cumulative[a - 1] + cumulative[a]) / 2 : cumulative[a]
+        to = (cumulative[a] + cumulative[b]) / 2
+      } else {
+        // Em coluna: sai logo abaixo da etapa irmã e volta logo acima da seguinte.
+        const gap = Math.min(24, (cumulative[b] - cumulative[a]) / 4)
+        from = cumulative[a] + gap
+        to = cumulative[b] - gap
+      }
+      const p = pointAt(points, cumulative, from)
+      const q = pointAt(points, cumulative, to)
+      branches.push({ d: `M${fix(p)} ${curve(p, node)} ${curve(node, q)}`, from: from / total, to: to / total })
+      at[parallelIndex] = (from + to) / 2 / total
+      return
+    }
+
+    // Fim do caminho: lado a lado, sai no meio do último trecho e chega junto com a irmã;
+    // em coluna, sai da própria etapa irmã e desce até a paralela logo depois dela.
+    const from = horizontal && a > 0 ? (cumulative[a - 1] + cumulative[a]) / 2 : cumulative[a]
+    const to = horizontal ? cumulative[a] : cumulative[a] + distance(points[a], node)
+    const p = pointAt(points, cumulative, from)
+    branches.push({ d: `M${fix(p)} ${curve(p, node)}`, from: from / total, to: to / total })
+    at[parallelIndex] = to / total
+  })
+
+  return { start: points[0], end: points[points.length - 1], main, branches, at }
 }
 
 export function Journey({ steps }: { steps: JourneyStep[] }) {
@@ -185,17 +201,20 @@ export function Journey({ steps }: { steps: JourneyStep[] }) {
             </defs>
             {/* Trilho: o percurso inteiro, sempre visível. */}
             <path className="journey__track" d={geometry.main} />
-            {geometry.branch && <path className="journey__track" d={geometry.branch} />}
+            {geometry.branches.map((branch) => (
+              <path key={branch.d} className="journey__track" d={branch.d} />
+            ))}
             {/* Linha que se constrói por cima do trilho. */}
             <motion.path className="journey__line" d={geometry.main} stroke={`url(#${gradientId})`} {...draw()} />
-            {geometry.branch && (
+            {geometry.branches.map((branch, i) => (
               <motion.path
+                key={i}
                 className="journey__line"
-                d={geometry.branch}
+                d={branch.d}
                 stroke={`url(#${gradientId})`}
-                {...draw(geometry.branchFrom, geometry.branchTo)}
+                {...draw(branch.from, branch.to)}
               />
-            )}
+            ))}
           </>
         )}
       </svg>

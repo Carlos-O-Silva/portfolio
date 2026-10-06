@@ -14,7 +14,7 @@ export interface Contacts {
 }
 
 /** Ícone da etapa na trajetória (veja ICONS em components/sections/Journey.tsx). */
-export type JourneyIcon = 'briefcase' | 'graduation' | 'wrench' | 'network' | 'globe' | 'code'
+export type JourneyIcon = 'briefcase' | 'graduation' | 'wrench' | 'network' | 'globe' | 'code' | 'map'
 
 export interface JourneyStep {
   /** Tipo da etapa, exibido acima do título. Ex.: 'Formação', 'Estágio'. */
@@ -70,7 +70,8 @@ export const profile: Profile = {
     { kind: 'Curso', title: 'Manutenção de computadores', text: 'Em paralelo à formação na ETEC', icon: 'wrench', parallel: true },
     { kind: 'Estágio', title: 'ETEC', text: 'Redes, infraestrutura e manutenção', icon: 'network' },
     { kind: 'Autônomo', title: 'Freelancer', text: 'Desenvolvimento de sites', icon: 'globe' },
-    { kind: 'Atual', title: 'Vektor Solutions', text: 'Desenvolvedor', icon: 'code', current: true },
+    { kind: 'Atual', title: 'Vektor Solutions', text: 'Desenvolvedor backend', icon: 'code', current: true },
+    { kind: 'Atual', title: 'MapaML', text: 'Desenvolvedor full stack, como PJ, sob demanda', icon: 'map', parallel: true, current: true },
   ],
   // As dos projetos (CarlosML, ML Monitor e Vigia Full) foram conferidas nos package.json;
   // JavaScript e PHP foram informados pelo Carlos.
