@@ -72,10 +72,11 @@ export const profile: Profile = {
     { kind: 'Autônomo', title: 'Freelancer', text: 'Desenvolvimento de sites', icon: 'globe' },
     { kind: 'Atual', title: 'Vektor Solutions', text: 'Desenvolvedor', icon: 'code', current: true },
   ],
-  // Conferidas nos package.json dos projetos (CarlosML, ML Monitor e Vigia Full).
+  // As dos projetos (CarlosML, ML Monitor e Vigia Full) foram conferidas nos package.json;
+  // JavaScript e PHP foram informados pelo Carlos.
   technologies: [
-    { group: 'Frontend', items: ['React', 'TypeScript', 'Next.js', 'Vite', 'Tailwind CSS'] },
-    { group: 'Backend e dados', items: ['Node.js', 'Express', 'SQLite', 'Supabase'] },
+    { group: 'Frontend', items: ['JavaScript', 'TypeScript', 'React', 'Next.js', 'Vite', 'Tailwind CSS'] },
+    { group: 'Backend e dados', items: ['PHP', 'Node.js', 'Express', 'SQLite', 'Supabase'] },
     { group: 'Extensões e testes', items: ['WXT', 'Zod', 'Vitest', 'Playwright'] },
   ],
   contactTitle: 'Vamos conversar?',

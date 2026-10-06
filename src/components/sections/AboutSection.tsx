@@ -41,7 +41,7 @@ export function AboutSection() {
 
         {technologies.length > 0 && (
           <div className="about__block about__tech">
-            <h3 className="about__subtitle">Tecnologias que utilizo nos projetos</h3>
+            <h3 className="about__subtitle">Tecnologias que utilizo</h3>
             <div className="techs">
               {technologies.map((group) => (
                 <div key={group.group} className="techs__group">
