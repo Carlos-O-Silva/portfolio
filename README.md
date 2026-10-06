@@ -6,7 +6,18 @@ o que é experimental e o que está planejado.
 
 É um site estático (SPA), sem backend. Todo o conteúdo fica em dois arquivos de dados.
 
-## Tecnologias
+## Sobre mim
+
+- **Atualmente:** desenvolvedor backend na Vektor Solutions e desenvolvedor full stack na MapaML (PJ, sob demanda).
+- **Formação:** Análise e Desenvolvimento de Sistemas na ETEC.
+- **Tecnologias que utilizo:**
+  - Frontend: JavaScript, TypeScript, React, Next.js, Vite e Tailwind CSS.
+  - Backend e dados: PHP, Node.js, Express, SQLite e Supabase.
+  - Extensões e testes: WXT, Zod, Vitest e Playwright.
+
+[GitHub](https://github.com/Carlos-O-Silva) · [LinkedIn](https://br.linkedin.com/in/carlos-alberto-oliveira-e-silva-360620232)
+
+## Tecnologias deste site
 
 | Tecnologia | Uso no projeto |
 |---|---|
@@ -24,7 +35,7 @@ o que é experimental e o que está planejado.
 ## Funcionalidades
 
 - **Tema claro e escuro.** Segue o tema do sistema, guarda a escolha do visitante e aplica o tema antes da primeira pintura, sem piscar.
-- **Trajetória animada.** O caminho se constrói uma vez ao entrar na tela: da esquerda para a direita no desktop, de cima para baixo no celular, com uma ramificação para a etapa que aconteceu em paralelo.
+- **Trajetória animada.** O caminho se constrói uma vez ao entrar na tela: da esquerda para a direita no desktop, de cima para baixo no celular. Etapas simultâneas viram ramificações: o curso feito durante a formação sai e volta para a linha, e as duas atuações atuais seguem lado a lado no fim do caminho.
 - **Cards de projeto com capturas reais**, feitas com dados fictícios ou simulados. Com mouse, a captura percorre a tela do app.
 - **Transição entre o card e a página do projeto** com View Transitions. Sem suporte no navegador, a navegação continua normal.
 - **Acessibilidade:**
@@ -64,7 +75,13 @@ Também dá para definir `SITE_URL=...` num arquivo `.env`. Sem ele, o build avi
 ## Editar o conteúdo
 
 - **`src/data/profile.ts`:** nome, cargo, textos da abertura e de "Sobre mim", trajetória (`journey`), tecnologias e contatos.
-  Listas e contatos vazios não aparecem no site.
+  Listas e contatos vazios não aparecem no site. Cada etapa da trajetória tem:
+  - `kind`: tipo, exibido acima do título (ex.: 'Formação', 'Atual');
+  - `title`: onde aconteceu;
+  - `text`: o que foi feito;
+  - `icon`: `briefcase`, `graduation`, `wrench`, `network`, `globe`, `code` ou `map`;
+  - `parallel: true`: a etapa aconteceu junto com a anterior e vira uma ramificação;
+  - `current: true`: atuação atual, em destaque.
 - **`src/data/projects.ts`:** projetos, na ordem em que aparecem. Cada um tem textos, estado atual (`working`, `experimental`,
   `planned`), decisões técnicas, capturas e links. `featured: true` deixa um projeto em destaque.
 - **`public/projetos/<slug>/`:** capturas dos projetos, de preferência em WebP. Informe `width` e `height` reais para evitar saltos
