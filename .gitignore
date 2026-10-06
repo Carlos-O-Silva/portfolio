@@ -1,0 +1,15 @@
+# Dependências e build
+node_modules
+dist
+
+# Variáveis de ambiente (ex.: SITE_URL)
+.env
+.env.*
+
+# Editor, sistema e temporários
+.vscode
+.idea
+.DS_Store
+Thumbs.db
+*.log
+*.tsbuildinfo

@@ -1,0 +1,144 @@
+.contact {
+  border-top: 1px solid var(--line);
+}
+
+.contact__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 40px;
+}
+
+/* Com o texto ampliado, as colunas encolhem e o texto quebra, em vez de sair da tela. */
+.contact__grid > * {
+  min-width: 0;
+}
+
+.contact__title {
+  font-size: clamp(2.5rem, 1rem + 6vw, 5.5rem);
+  line-height: 1;
+  letter-spacing: -0.045em;
+}
+
+.contact__text {
+  margin-top: 24px;
+  max-width: 40ch;
+  font-size: clamp(1.0625rem, 0.95rem + 0.45vw, 1.25rem);
+  color: var(--text-muted);
+}
+
+.contact__channels {
+  display: grid;
+  gap: 8px;
+}
+
+/* GitHub e LinkedIn: o próprio nome do canal é o link. */
+.contact__link,
+.contact__address {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25em;
+  min-height: 48px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 8px;
+  text-decoration-color: var(--line);
+  transition: text-decoration-color var(--dur-micro) var(--ease-out);
+}
+
+.contact__link {
+  font-size: clamp(1.75rem, 1.2rem + 2vw, 2.75rem);
+}
+
+.contact__address {
+  font-size: clamp(1.25rem, 1rem + 1.2vw, 1.875rem);
+  overflow-wrap: anywhere;
+}
+
+.contact__external {
+  width: 0.7em;
+  height: 0.7em;
+  flex: none;
+  color: var(--accent-text);
+  transition: transform var(--dur-micro) var(--ease-out);
+}
+
+@media (hover: hover) {
+  .contact__link:hover,
+  .contact__address:hover {
+    text-decoration-color: var(--orange);
+  }
+
+  .contact__link:hover .contact__external {
+    transform: translate(2px, -2px);
+  }
+}
+
+.contact__email {
+  display: grid;
+  gap: 4px;
+  margin-bottom: 16px;
+}
+
+.contact__label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.contact__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+}
+
+.contact__copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--pill);
+  background: none;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition:
+    border-color var(--dur-micro) var(--ease-out),
+    transform var(--dur-micro) var(--ease-out);
+}
+
+.contact__copy:active {
+  transform: scale(0.97);
+}
+
+@media (hover: hover) {
+  .contact__copy:hover {
+    border-color: var(--text);
+  }
+}
+
+.contact__error {
+  width: 100%;
+  font-size: 0.875rem;
+  color: var(--accent-text);
+}
+
+@media (min-width: 900px) {
+  .contact__grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: 32px;
+    align-items: end;
+  }
+
+  .contact__grid > :first-child {
+    grid-column: 1 / span 7;
+  }
+
+  .contact__grid > :last-child {
+    grid-column: 9 / span 4;
+  }
+}

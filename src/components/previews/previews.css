@@ -1,0 +1,58 @@
+/* O quadro (pai) define a proporção; a prévia ocupa tudo. */
+.preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: var(--surface-sunk);
+}
+
+.preview[data-fit='cover'] img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Telas de app: se precisar cortar, corta embaixo, nunca o topo. */
+  object-position: top;
+}
+
+/* Popups e telas estreitas: imagem inteira, centralizada, como um objeto sobre a mesa. */
+.preview[data-fit='contain'] {
+  padding: 6% 8%;
+}
+
+.preview[data-fit='contain'] img {
+  width: auto;
+  height: auto;
+  min-width: 0;
+  min-height: 0;
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+}
+
+/*
+ * Captura alta no card: a imagem fica na proporção real, presa ao topo do quadro.
+ * Com mouse, ao passar sobre a prévia, ela sobe até mostrar o fim da tela.
+ * O quadro é um container: 100cqh é a altura dele, então o deslocamento
+ * para exatamente no fim da imagem, sem esticar nada.
+ */
+.preview[data-scroll] {
+  display: block;
+  overflow: hidden;
+  container-type: size;
+}
+
+.preview[data-scroll] img {
+  width: 100%;
+  height: auto;
+  transition: transform 700ms var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .card__media:hover .preview[data-scroll] img {
+    transform: translateY(min(0px, calc(-100% + 100cqh)));
+    transition: transform var(--scroll-duration, 2.4s) cubic-bezier(0.45, 0, 0.55, 1) 150ms;
+  }
+}

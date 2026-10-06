@@ -1,0 +1,183 @@
+/*
+ * Trajetória (Journey.tsx). Este arquivo define onde ficam as etapas; o componente
+ * mede as estações e desenha as linhas por cima, então os dois layouts usam o mesmo código.
+ *
+ * Celular: coluna; a etapa paralela fica recuada, numa ramificação à direita.
+ * Desktop (1024px+): cinco colunas; a etapa paralela sobe para a linha de cima,
+ * na mesma coluna da etapa que aconteceu junto com ela.
+ */
+.journey {
+  --node: 44px;
+  position: relative;
+  margin-top: 20px;
+  padding-top: clamp(28px, 4vw, 44px);
+  border-top: 1px solid var(--line);
+}
+
+.journey__svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+/* Trilho tracejado: o percurso inteiro, visível antes da linha chegar. */
+.journey__track {
+  fill: none;
+  stroke: var(--line-strong);
+  stroke-width: 1.5;
+  stroke-dasharray: 2 6;
+  stroke-linecap: round;
+}
+
+.journey__line {
+  fill: none;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+}
+
+/* A linha esquenta do grafite ao laranja até a atuação atual. */
+.journey__stop-start {
+  stop-color: var(--text-muted);
+}
+
+.journey__stop-end {
+  stop-color: var(--orange);
+}
+
+.journey__list {
+  display: grid;
+  gap: 28px;
+  padding: 0;
+  list-style: none;
+}
+
+.journey__step {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--node) minmax(0, 1fr);
+  column-gap: 16px;
+  align-items: start;
+}
+
+.journey__step--parallel {
+  margin-left: 40px;
+}
+
+/* Estação: anel com ícone. Apagada por baixo; a camada acesa entra quando a linha chega. */
+.journey__node {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: var(--node);
+  height: var(--node);
+  border: 1.5px solid var(--line-strong);
+  border-radius: 50%;
+  background: var(--bg);
+  color: var(--text-muted);
+}
+
+.journey__icon {
+  width: 19px;
+  height: 19px;
+  stroke-width: 1.75;
+}
+
+.journey__lit {
+  position: absolute;
+  inset: -1.5px;
+  display: grid;
+  place-items: center;
+  border: 1.5px solid var(--text);
+  border-radius: 50%;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.journey__step--current .journey__lit {
+  border-color: var(--orange);
+  background: var(--orange);
+  color: var(--graphite);
+  box-shadow: 0 0 0 6px rgb(255 92 53 / 0.18);
+}
+
+.journey__pulse {
+  position: absolute;
+  inset: -1.5px;
+  border: 2px solid var(--orange);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.journey__text {
+  min-width: 0;
+  padding-top: 1px;
+}
+
+.journey__kind {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--accent-text);
+}
+
+.journey__step--current .journey__kind {
+  display: inline-block;
+  padding: 1px 10px;
+  border-radius: var(--pill);
+  background: var(--orange);
+  color: var(--graphite);
+}
+
+.journey__title {
+  margin-top: 4px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.25rem;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+.journey__step--current .journey__title {
+  font-size: 1.5rem;
+}
+
+.journey__desc {
+  margin-top: 4px;
+  font-size: 0.9375rem;
+  color: var(--text-muted);
+}
+
+@media (min-width: 1024px) {
+  .journey {
+    --node: 48px;
+  }
+
+  .journey__list {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    column-gap: 28px;
+    /* Distância entre a faixa paralela e a principal: a ramificação precisa ser legível. */
+    row-gap: 56px;
+  }
+
+  .journey__step {
+    grid-column: var(--col);
+    grid-row: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+  }
+
+  /* Etapa paralela: texto em cima, estação embaixo, perto da linha principal. */
+  .journey__step--parallel {
+    grid-row: 1;
+    align-self: end;
+    flex-direction: column-reverse;
+    margin-left: 0;
+  }
+}

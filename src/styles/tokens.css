@@ -1,0 +1,79 @@
+/*
+ * Tokens de design.
+ *
+ * Cores em duas camadas:
+ *   paleta (fixa): marfim, grafite, laranja.
+ *   papéis (mudam com o tema): --bg, --surface, --text, --line, --inverse...
+ * Os componentes usam os papéis; o tema escuro só redefine os papéis.
+ * O tema fica em <html data-theme="light|dark"> (veja index.html e ThemeToggle).
+ *
+ * Regra de raios (seguir em todo o projeto):
+ *   botões e controles: --pill
+ *   cards de projeto: --radius-card (10px)
+ *   imagens, prévias e janelas: --radius (6px)
+ *   campos de texto: --radius-sm (4px)
+ */
+:root {
+  /* Paleta */
+  --ivory: #f4f1ea;
+  --ivory-deep: #ebe6db;
+  --white: #ffffff;
+  --graphite: #171717;
+  --orange: #ff5c35;
+
+  /* Papéis: tema claro */
+  color-scheme: light;
+  --bg: var(--ivory);
+  --surface: var(--white);
+  --surface-sunk: var(--ivory-deep);
+  --text: var(--graphite);
+  --text-muted: #5e5a54;
+  --line: rgb(23 23 23 / 0.14);
+  --line-strong: rgb(23 23 23 / 0.28);
+  /* Fundo de botões e marcadores "invertidos" e o texto sobre eles. */
+  --inverse: var(--graphite);
+  --on-inverse: var(--ivory);
+  /* Laranja para texto pequeno: no claro precisa ser mais escuro (5:1 sobre o marfim). */
+  --accent-text: #b93a1a;
+  /* Sombras tingidas pelo grafite, nunca preto puro. */
+  --shadow-sm: 0 1px 2px rgb(23 23 23 / 0.06), 0 4px 12px rgb(23 23 23 / 0.06);
+  --shadow-md: 0 2px 4px rgb(23 23 23 / 0.05), 0 18px 40px -12px rgb(23 23 23 / 0.22);
+
+  --font-display: 'Syne', 'Arial Black', 'Helvetica Neue', Arial, sans-serif;
+  --font-body: 'Plus Jakarta Sans Variable', 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'Cascadia Code', Consolas, 'Courier New', monospace;
+
+  --radius-card: 10px;
+  --radius: 6px;
+  --radius-sm: 4px;
+  --pill: 999px;
+
+  --container: 1280px;
+  --gutter: clamp(16px, 4.5vw, 56px);
+  --header-h: 68px;
+  --section-space: clamp(72px, 9vw, 128px);
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-micro: 200ms;
+
+  /* Camadas (z-index) do sistema. */
+  --z-header: 50;
+  --z-skip: 60;
+}
+
+/* Papéis: tema escuro (grafite quente, mesmo laranja). Contraste conferido: texto 16,7:1, secundário 7,5:1. */
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #121110;
+  --surface: #1b1a18;
+  --surface-sunk: #24221f;
+  --text: var(--ivory);
+  --text-muted: #a8a39a;
+  --line: rgb(244 241 234 / 0.14);
+  --line-strong: rgb(244 241 234 / 0.32);
+  --inverse: var(--ivory);
+  --on-inverse: var(--graphite);
+  --accent-text: #ff7a57;
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.3), 0 4px 12px rgb(0 0 0 / 0.25);
+  --shadow-md: 0 2px 4px rgb(0 0 0 / 0.3), 0 18px 40px -12px rgb(0 0 0 / 0.6);
+}

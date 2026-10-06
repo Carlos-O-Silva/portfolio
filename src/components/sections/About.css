@@ -1,0 +1,120 @@
+.about {
+  border-top: 1px solid var(--line);
+  /* A abertura já termina com respiro; aqui o topo é menor para não somar dois vazios. */
+  padding-top: clamp(64px, 8vw, 112px);
+}
+
+.about__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 24px;
+}
+
+/* Com o texto ampliado, as colunas encolhem e o texto quebra, em vez de sair da tela. */
+.about__grid > * {
+  min-width: 0;
+}
+
+.about__title {
+  font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem);
+  letter-spacing: -0.03em;
+}
+
+.about__lead {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.5rem, 1rem + 2.2vw, 2.75rem);
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+.about__text {
+  margin-top: 28px;
+  max-width: 52ch;
+  font-size: 1.0625rem;
+  color: var(--text-muted);
+}
+
+.about__block {
+  margin-top: 56px;
+}
+
+.about__subtitle {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+.about__interests {
+  margin-top: 8px;
+  font-size: 1.0625rem;
+}
+
+/* Tecnologias em três grupos, sem caixas: só o nome do grupo e a lista. */
+.techs {
+  display: grid;
+  gap: 28px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+
+.techs__name {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  color: var(--accent-text);
+}
+
+.techs__items {
+  display: grid;
+  gap: 6px;
+  margin-top: 12px;
+  font-size: 1.0625rem;
+}
+
+/* Celular: itens lado a lado, para a lista não virar uma coluna longa. */
+@media (max-width: 639px) {
+  .techs {
+    gap: 20px;
+  }
+
+  .techs__items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 16px;
+    margin-top: 8px;
+  }
+}
+
+@media (min-width: 640px) {
+  .techs {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: 32px;
+  }
+}
+
+@media (min-width: 900px) {
+  .about__grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: 32px;
+  }
+
+  .about__side {
+    grid-column: 1 / span 3;
+    padding-top: 10px;
+  }
+
+  .about__main,
+  .about__tech {
+    grid-column: 4 / span 8;
+  }
+
+  /* A trajetória usa a largura toda: no desktop o caminho corre da esquerda para a direita. */
+  .about__journey {
+    grid-column: 1 / -1;
+  }
+}

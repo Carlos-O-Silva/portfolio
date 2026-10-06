@@ -1,0 +1,170 @@
+.projects__grid {
+  display: grid;
+  gap: 24px;
+  margin-top: clamp(32px, 5vw, 56px);
+}
+
+/*
+ * Celular: uma coluna.
+ * Tablet: o projeto em destaque ocupa a linha inteira e os outros dois vêm lado a lado
+ * (1 + 2, sem célula vazia).
+ * Desktop: os três na mesma linha, com o destaque 1,5x mais largo.
+ */
+@media (min-width: 640px) {
+  .projects__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .projects__item--featured {
+    grid-column: 1 / -1;
+  }
+
+  .projects__item--featured .card__media {
+    aspect-ratio: 16 / 8;
+  }
+}
+
+@media (min-width: 1024px) {
+  .projects__grid {
+    grid-template-columns: minmax(0, 1.5fr) repeat(2, minmax(0, 1fr));
+  }
+
+  .projects__item--featured {
+    grid-column: auto;
+  }
+
+  /* Mesma altura de prévia na linha: o destaque ganha largura, não altura. */
+  .card__media,
+  .projects__item--featured .card__media {
+    aspect-ratio: auto;
+    height: clamp(220px, 19vw, 280px);
+  }
+
+  .projects__item--featured .card__title {
+    font-size: clamp(1.75rem, 1.2rem + 1vw, 2.25rem);
+  }
+}
+
+/* Card: superfície branca, borda leve; o link do título cobre o card inteiro. */
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  transition:
+    border-color 300ms var(--ease-out),
+    box-shadow 300ms var(--ease-out);
+}
+
+/* min-width: 0 impede que o conteúdo force o card além da coluna do grid. */
+.projects__item {
+  display: flex;
+  min-width: 0;
+}
+
+.projects__item > .card {
+  flex: 1;
+  min-width: 0;
+}
+
+/* A prévia é um link próprio, acima da área clicável do card, para receber o hover. */
+.card__media {
+  position: relative;
+  z-index: 1;
+  display: block;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: var(--surface-sunk);
+}
+
+.card__body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 20px 12px 12px;
+}
+
+.card__meta {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.card__status {
+  color: var(--accent-text);
+}
+
+.card__title {
+  margin-top: 10px;
+  /* Folga para descendentes (g, p, q) não serem cortados. */
+  line-height: 1.2;
+  padding-bottom: 0.08em;
+  font-size: clamp(1.5rem, 1.2rem + 0.8vw, 1.875rem);
+  letter-spacing: -0.03em;
+}
+
+/* Inline (não flex): com o texto ampliado, o nome pode quebrar em vez de vazar do card. */
+.card__title a {
+  text-decoration: none;
+}
+
+.card__title a::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-card);
+}
+
+.card__title a:focus-visible {
+  outline: none;
+}
+
+.card:has(.card__title a:focus-visible) {
+  outline: 2px solid var(--accent-text);
+  outline-offset: 3px;
+}
+
+.card__arrow {
+  display: inline-block;
+  width: 0.7em;
+  height: 0.7em;
+  margin-left: 0.3em;
+  vertical-align: -0.02em;
+  color: var(--accent-text);
+  transition: transform 300ms var(--ease-out);
+}
+
+.card__summary {
+  margin-top: 10px;
+  color: var(--text-muted);
+}
+
+.card__tech {
+  margin-top: auto;
+  padding-top: 20px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text);
+}
+
+/* Links externos ficam acima da área clicável do card. */
+.card .project-links {
+  position: relative;
+  z-index: 1;
+  margin-top: 8px;
+}
+
+@media (hover: hover) {
+  .card:hover {
+    border-color: var(--line-strong);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .card:hover .card__arrow {
+    transform: translateX(0.18em);
+  }
+}

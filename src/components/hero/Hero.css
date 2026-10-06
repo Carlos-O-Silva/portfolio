@@ -1,0 +1,122 @@
+.hero__grid {
+  display: grid;
+  /* Com o texto ampliado, as colunas encolhem e o texto quebra, em vez de sair da tela. */
+  grid-template-columns: minmax(0, 1fr);
+  gap: 48px;
+  padding-block: clamp(48px, 9vw, 96px) clamp(48px, 7vw, 80px);
+}
+
+.hero__name {
+  font-size: 1.125rem;
+  color: var(--text-muted);
+}
+
+.hero__name strong {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.hero__title {
+  margin-top: 20px;
+  font-size: clamp(2.75rem, 1rem + 8.4vw, 4.75rem);
+  line-height: 1;
+  letter-spacing: -0.045em;
+}
+
+/* Sublinhado laranja na última palavra; desenha da esquerda para a direita logo após a abertura. */
+.hero__title em {
+  font-style: normal;
+  background: linear-gradient(var(--orange), var(--orange)) no-repeat 0 90% / 100% 0.12em;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero__title em {
+    animation: underline-draw 800ms 300ms var(--ease-out) backwards;
+  }
+}
+
+@keyframes underline-draw {
+  from {
+    background-size: 0% 0.12em;
+  }
+}
+
+.hero__intro {
+  margin-top: 24px;
+  max-width: 40ch;
+  font-size: clamp(1.0625rem, 0.95rem + 0.45vw, 1.25rem);
+  color: var(--text-muted);
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 28px;
+  margin-top: 36px;
+}
+
+.hero__contact svg {
+  transition: transform var(--dur-micro) var(--ease-out);
+}
+
+@media (hover: hover) {
+  .hero__contact:hover svg {
+    transform: translateX(3px);
+  }
+}
+
+.hero__visual {
+  justify-self: center;
+  width: min(72%, 260px);
+}
+
+/* Desenho em traço fino que se forma sozinho (HeroSketch). */
+.sketch {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+}
+
+.sketch__svg {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  overflow: visible;
+}
+
+.sketch__stroke {
+  fill: none;
+  stroke: var(--text);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.sketch__stroke.is-accent {
+  stroke: var(--orange);
+  stroke-width: 2;
+}
+
+.sketch__label {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+@media (min-width: 900px) {
+  .hero__grid {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    align-items: center;
+    min-height: min(calc(100dvh - var(--header-h)), 720px);
+  }
+
+  .hero__title {
+    font-size: clamp(3.5rem, 0.8rem + 5vw, 5.5rem);
+  }
+
+  .hero__visual {
+    justify-self: center;
+    width: min(100%, 250px);
+  }
+}
