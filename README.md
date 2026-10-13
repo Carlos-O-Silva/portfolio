@@ -1,7 +1,7 @@
 # Portfólio · Carlos Alberto
 
 Portfólio pessoal de Carlos Alberto, desenvolvedor full stack. Apresenta minha trajetória e três projetos reais:
-**CarlosML**, **ML Monitor** e **Vigia Full**. Cada projeto tem uma página própria que separa o que já funciona,
+**CarlosML**, **ML Monitor** e **FullMap**. Cada projeto tem uma página própria que separa o que já funciona,
 o que é experimental e o que está planejado.
 
 É um site estático (SPA), sem backend. Todo o conteúdo fica em dois arquivos de dados.
